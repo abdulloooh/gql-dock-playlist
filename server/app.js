@@ -1,6 +1,8 @@
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
 const mongoose = require("mongoose");
+const cors = require("cors");
+const httpLogger = require("morgan");
 
 const schema = require("./schema/schema");
 
@@ -14,6 +16,8 @@ mongoose.connect(
   }
 );
 
+app.use(cors());
+if (app.get("env") === "development") app.use(httpLogger("tiny"));
 app.use("/graphql", graphqlHTTP({ schema, graphiql: true }));
 
 const PORT = process.env.PORT || 4000;
